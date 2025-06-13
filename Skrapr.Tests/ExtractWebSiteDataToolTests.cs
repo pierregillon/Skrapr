@@ -2,6 +2,7 @@ using System.Text.Json;
 using FluentAssertions;
 using Json.Schema;
 using ModelContextProtocol.Client;
+using Skrapr.Domain;
 using Xunit.Abstractions;
 
 namespace Skrapr.Tests;

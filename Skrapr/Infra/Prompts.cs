@@ -1,4 +1,4 @@
-namespace Skrapr;
+namespace Skrapr.Infra;
 
 public class Prompts
 {

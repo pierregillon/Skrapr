@@ -1,4 +1,7 @@
 using Skrapr;
+using Skrapr.Domain;
+using Skrapr.Infra;
+using Skrapr.Infra.Playwright;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,10 +24,17 @@ builder.Services
     .BindConfiguration(PlaywrightMcpConfiguration.SectionName)
     .ValidateDataAnnotations();
 
+builder.Services
+    .AddScoped<IAgent, SemanticKernelAgent>()
+    .AddScoped<IPlaywrightConfigurator, RemoteMcpServerPlaywrightConfigurator>();
+
 var app = builder.Build();
 
 app.MapMcp();
 
 app.Run();
 
-public partial class Program { }
+namespace Skrapr
+{
+    public partial class Program { }
+}

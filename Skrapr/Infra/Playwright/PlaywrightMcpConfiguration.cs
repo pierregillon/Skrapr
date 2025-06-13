@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Skrapr;
+namespace Skrapr.Infra.Playwright;
 
 public class PlaywrightMcpConfiguration
 {

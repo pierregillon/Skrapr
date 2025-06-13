@@ -1,5 +1,5 @@
 using System.Text.Json;
 
-namespace Skrapr;
+namespace Skrapr.Domain;
 
 public record WebPageParsingResult(JsonElement Data);

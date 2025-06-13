@@ -1,6 +1,6 @@
 using Json.Schema;
 
-namespace Skrapr;
+namespace Skrapr.Domain;
 
 public record UserDataJsonSchema
 {
