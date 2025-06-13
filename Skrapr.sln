@@ -1,0 +1,27 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Skrapr", "Skrapr\Skrapr.csproj", "{3E676DF1-5C39-4FA3-8C9B-CD1F2AB56444}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Skrapr.Tests", "Skrapr.Tests\Skrapr.Tests.csproj", "{4B0E963F-A9F0-4686-862A-58B0CA2342FB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{454D5AED-5068-4DB3-A927-1898E9645D8A}"
+	ProjectSection(SolutionItems) = preProject
+		docker-compose.yml = docker-compose.yml
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3E676DF1-5C39-4FA3-8C9B-CD1F2AB56444}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E676DF1-5C39-4FA3-8C9B-CD1F2AB56444}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E676DF1-5C39-4FA3-8C9B-CD1F2AB56444}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E676DF1-5C39-4FA3-8C9B-CD1F2AB56444}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4B0E963F-A9F0-4686-862A-58B0CA2342FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B0E963F-A9F0-4686-862A-58B0CA2342FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B0E963F-A9F0-4686-862A-58B0CA2342FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B0E963F-A9F0-4686-862A-58B0CA2342FB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
