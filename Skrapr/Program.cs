@@ -12,7 +12,7 @@ builder
 builder.Services
     .AddMcpServer()
     .WithHttpTransport()
-    .WithTools<ExtractWebSiteDataTool>();
+    .WithTools<ScrapingTools>();
 
 builder.Services
     .AddOptions<AzureOpenAiConfiguration>()

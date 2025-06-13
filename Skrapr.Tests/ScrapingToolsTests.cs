@@ -7,9 +7,9 @@ using Xunit.Abstractions;
 
 namespace Skrapr.Tests;
 
-public class ExtractWebSiteDataToolTests(ITestOutputHelper output) : IDisposable, IAsyncDisposable
+public class ScrapingToolsTests(ITestOutputHelper output) : IDisposable, IAsyncDisposable
 {
-    private const string ParseWebSiteToolName = "parse_web_site";
+    private const string ScrapeWithSchemaToolName = "scrape_with_schema";
 
     private readonly TestApplication _application = new(output);
 
@@ -23,19 +23,16 @@ public class ExtractWebSiteDataToolTests(ITestOutputHelper output) : IDisposable
         var tools = await mcpClient.ListToolsAsync();
 
         tools.Should().HaveCount(1);
-        tools.Single().Name.Should().Be(ParseWebSiteToolName);
-        tools.Single().Description
-            .Should()
-            .Be("Parse a web site and extract specific data.");
+        tools.Single().Name.Should().Be(ScrapeWithSchemaToolName);
     }
 
     [Theory]
     [InlineData(" ")]
     [InlineData("   ")]
     [InlineData(null)]
-    public async Task Cannot_parse_an_empty_web_site_url(string? url)
+    public async Task Cannot_scrape_an_empty_web_site_url(string? url)
     {
-        var action = () => ParseWebSite(url!);
+        var action = () => ScrapeWithSchema(url!);
 
         await action
             .Should()
@@ -44,9 +41,9 @@ public class ExtractWebSiteDataToolTests(ITestOutputHelper output) : IDisposable
     }
 
     [Fact]
-    public async Task Cannot_parse_a_invalid_web_site_url()
+    public async Task Cannot_scrape_an_invalid_web_site_url()
     {
-        var action = () => ParseWebSite("toto");
+        var action = () => ScrapeWithSchema("toto");
 
         await action
             .Should()
@@ -66,9 +63,9 @@ public class ExtractWebSiteDataToolTests(ITestOutputHelper output) : IDisposable
                     },,,,,,
                 }
                 """)]
-    public async Task Cannot_parse_a_web_page_with_an_invalid_schema(string invalidSchema)
+    public async Task Cannot_scrape_a_web_site_with_an_invalid_schema(string invalidSchema)
     {
-        var action = () => ParseWebSite(schema: invalidSchema);
+        var action = () => ScrapeWithSchema(schema: invalidSchema);
         ;
 
         await action
@@ -88,9 +85,9 @@ public class ExtractWebSiteDataToolTests(ITestOutputHelper output) : IDisposable
                   "properties": {}
                 }
                 """)]
-    public async Task Cannot_parse_a_web_page_with_an_empty_schema(string emptySchema)
+    public async Task Cannot_scrape_a_web_page_with_an_empty_schema(string emptySchema)
     {
-        var action = () => ParseWebSite(schema: emptySchema);
+        var action = () => ScrapeWithSchema(schema: emptySchema);
         ;
 
         await action
@@ -100,7 +97,7 @@ public class ExtractWebSiteDataToolTests(ITestOutputHelper output) : IDisposable
     }
 
     [Fact]
-    public async Task Parse_web_site()
+    public async Task Scrape_web_site()
     {
         var jsonSchema =
             """
@@ -147,7 +144,7 @@ public class ExtractWebSiteDataToolTests(ITestOutputHelper output) : IDisposable
             }
             """;
 
-        var webPageParsingResult = await ParseWebSite(
+        var webPageParsingResult = await ScrapeWithSchema(
             "https://snowcamp.io",
             jsonSchema,
             "Extract data in French or translate them in French."
@@ -162,7 +159,7 @@ public class ExtractWebSiteDataToolTests(ITestOutputHelper output) : IDisposable
         result.IsValid.Should().BeTrue();
     }
 
-    private async Task<WebPageParsingResult> ParseWebSite(
+    private async Task<WebPageParsingResult> ScrapeWithSchema(
         string webSite = "https://www.google.com",
         string schema = "{}",
         string? instruction = null
@@ -173,7 +170,7 @@ public class ExtractWebSiteDataToolTests(ITestOutputHelper output) : IDisposable
         var mcpClient = await BuildMcpClient(client);
 
         var response = await mcpClient.CallToolAsync(
-            ParseWebSiteToolName,
+            ScrapeWithSchemaToolName,
             new Dictionary<string, object?>
             {
                 { "url", webSite },
