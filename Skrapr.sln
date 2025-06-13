@@ -4,6 +4,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Skrapr", "Skrapr\Skrapr.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Skrapr.Tests", "Skrapr.Tests\Skrapr.Tests.csproj", "{4B0E963F-A9F0-4686-862A-58B0CA2342FB}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Items", "Items", "{AF19DEBD-848D-4DB7-AA27-676141CBCA58}"
+	ProjectSection(SolutionItems) = preProject
+		Dockerfile = Dockerfile
+		NoBuildDockerfile = NoBuildDockerfile
+		.dockerignore = .dockerignore
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
