@@ -1,12 +1,16 @@
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using Microsoft.Extensions.Options;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
 using Microsoft.SemanticKernel.Connectors.AzureOpenAI;
 using ModelContextProtocol.Client;
+using ModelContextProtocol.Protocol;
 using ModelContextProtocol.Server;
+
 #pragma warning disable SKEXP0001
 
 namespace Skrapr;
@@ -25,18 +29,46 @@ public class ExtractWebSiteDataTool(
     private readonly AzureOpenAiConfiguration _configuration = configuration.Value;
     private readonly PlaywrightMcpConfiguration _playwrightMcpConfiguration = playwrightConfiguration.Value;
 
-    [McpServerTool]
-    [Description("Parse a web page and extract specific data.")]
-    public async Task<WebPageParsingResult> ParseWebPage(
-        [Description("The url to browse.")] string url,
-        [Description("The json schema to extract.")]
-        string schema,
-        [Description("Specific instruction to follow during the process.")]
-        string? instruction = null
+    [McpServerTool(
+        Name = "parse_web_site",
+        Title = "Parse a web site and extract specific data.",
+        ReadOnly = true,
+        Idempotent = false,
+        Destructive = false
+    )]
+    [Description("Parse a web site and extract specific data.")]
+    public async Task<object> ParseWebSite(
+        [Required] [Description("The web site url to browse.")] string url,
+        [Required] [Description("The json schema to extract.")] string jsonSchema,
+        [Description("Specific instruction to follow during the process.")] string? instruction = null
     )
     {
-        CheckJsonSchema(schema);
+        try
+        {
+            var webSiteUrl = new WebSiteUrl(url);
+            var userDataJsonSchema = new UserDataJsonSchema(jsonSchema);
 
+            return await Process(webSiteUrl, userDataJsonSchema, instruction);
+        }
+        catch (ArgumentException e)
+        {
+            return new CallToolResponse
+            {
+                Content =
+                [
+                    new Content
+                    {
+                        Type = "text",
+                        Text = e.Message
+                    }
+                ],
+                IsError = true
+            };
+        }
+    }
+
+    private async Task<WebPageParsingResult> Process(WebSiteUrl url, UserDataJsonSchema schema, string? instruction)
+    {
         var builder = Kernel.CreateBuilder();
 
         builder.Services.AddAzureOpenAIChatCompletion(
@@ -97,7 +129,7 @@ public class ExtractWebSiteDataTool(
         var kernelFunctions = tools
             .Select(aiFunction => aiFunction.AsKernelFunction())
             .ToList();
-        
+
         kernel.Plugins.AddFromFunctions("Playwright", kernelFunctions);
     }
 
@@ -105,11 +137,5 @@ public class ExtractWebSiteDataTool(
     {
         var utf8JsonReader = new Utf8JsonReader(Encoding.UTF8.GetBytes(textResult.Single().Content!));
         return JsonElement.ParseValue(ref utf8JsonReader);
-    }
-
-    private static void CheckJsonSchema(string schema)
-    {
-        var utf8JsonReader = new Utf8JsonReader(Encoding.UTF8.GetBytes(schema));
-        _ = JsonElement.ParseValue(ref utf8JsonReader);
     }
 }

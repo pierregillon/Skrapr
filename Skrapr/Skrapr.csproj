@@ -7,16 +7,9 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="JsonSchema.Net" Version="7.3.4" />
         <PackageReference Include="Microsoft.SemanticKernel" Version="1.56.0" />
         <PackageReference Include="ModelContextProtocol.AspNetCore" Version="0.2.0-preview.3" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Properties\" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <None Remove="Properties\launchSettings.json" />
     </ItemGroup>
 
 </Project>
