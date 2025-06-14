@@ -13,7 +13,8 @@ namespace Skrapr.Domain;
 
 public class SemanticKernelAgent(
     IOptions<AzureOpenAiConfiguration> configuration,
-    IPlaywrightMcpClient playwrightMcpClient
+    IPlaywrightMcpClient playwrightMcpClient,
+    ILoggerFactory loggerFactory
 ) : IAgent
 {
     private readonly AzureOpenAiConfiguration _configuration = configuration.Value;
@@ -44,7 +45,7 @@ public class SemanticKernelAgent(
                             """;
 
         var thread = new ChatHistoryAgentThread();
-        
+
         var responses = await agent.InvokeAsync(instructions, thread).ToListAsync();
 
         var jsonResult = ToJsonElement(responses.Select(x => x.Message).ToList());
@@ -56,6 +57,7 @@ public class SemanticKernelAgent(
     {
         var builder = Kernel.CreateBuilder();
 
+        builder.Services.AddSingleton(loggerFactory);
         builder.Services.AddAzureOpenAIChatCompletion(
             _configuration.DeploymentName,
             _configuration.Endpoint,
@@ -72,7 +74,7 @@ public class SemanticKernelAgent(
     private async Task<IReadOnlyCollection<KernelFunction>> GetPlaywrightKernelFunctions()
     {
         var mcpClient = await playwrightMcpClient.BuildMcpClient();
-        
+
         var tools = await mcpClient.ListToolsAsync();
 
         return tools
