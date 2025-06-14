@@ -67,7 +67,7 @@ public class SemanticKernelAgent(
         var kernel = builder.Build();
 
         kernel.Plugins.AddFromFunctions("Playwright", await GetPlaywrightKernelFunctions());
-        
+
         return kernel;
     }
 
@@ -77,7 +77,17 @@ public class SemanticKernelAgent(
 
         var tools = await mcpClient.ListToolsAsync();
 
+        var forbiddenTools = new[]
+        {
+            "browser_pdf_save", 
+            "browser_install", 
+            "browser_generate_playwright_test", 
+            "browser_network_requests",
+            "browser_console_messages"
+        };
+
         return tools
+            .Where(x => !forbiddenTools.Contains(x.Name))
             .Select(aiFunction => aiFunction.AsKernelFunction())
             .ToList();
     }
