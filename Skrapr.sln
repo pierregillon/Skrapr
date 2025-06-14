@@ -9,6 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Items", "Items", "{AF19DEBD
 		Dockerfile = Dockerfile
 		NoBuildDockerfile = NoBuildDockerfile
 		.dockerignore = .dockerignore
+		deploy-docker-image.sh = deploy-docker-image.sh
 	EndProjectSection
 EndProject
 Global
