@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Skrapr.Infra;
+namespace Skrapr.Domain;
 
 public class AzureOpenAiConfiguration
 {

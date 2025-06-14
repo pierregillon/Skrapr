@@ -5,11 +5,11 @@ using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.Agents;
 using Microsoft.SemanticKernel.Connectors.AzureOpenAI;
 using ModelContextProtocol.Client;
-using Skrapr.Domain;
+using Skrapr.Domain.ValueObjects;
 
 #pragma warning disable SKEXP0001
 
-namespace Skrapr.Infra;
+namespace Skrapr.Domain;
 
 public class SemanticKernelAgent(
     IOptions<AzureOpenAiConfiguration> configuration,
@@ -64,17 +64,20 @@ public class SemanticKernelAgent(
 
         var kernel = builder.Build();
 
+        kernel.Plugins.AddFromFunctions("Playwright", await GetPlaywrightKernelFunctions());
+        
+        return kernel;
+    }
+
+    private async Task<IReadOnlyCollection<KernelFunction>> GetPlaywrightKernelFunctions()
+    {
         var mcpClient = await playwrightMcpClient.BuildMcpClient();
         
         var tools = await mcpClient.ListToolsAsync();
 
-        var kernelFunctions = tools
+        return tools
             .Select(aiFunction => aiFunction.AsKernelFunction())
             .ToList();
-
-        kernel.Plugins.AddFromFunctions("Playwright", kernelFunctions);
-        
-        return kernel;
     }
 
     private static JsonElement ToJsonElement(IReadOnlyList<ChatMessageContent> textResult)

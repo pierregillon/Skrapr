@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using ModelContextProtocol.Protocol;
 using ModelContextProtocol.Server;
 using Skrapr.Domain;
+using Skrapr.Domain.ValueObjects;
 
 #pragma warning disable SKEXP0001
 

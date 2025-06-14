@@ -1,4 +1,4 @@
-namespace Skrapr.Domain;
+namespace Skrapr.Domain.ValueObjects;
 
 public record WebSiteUrl
 {
