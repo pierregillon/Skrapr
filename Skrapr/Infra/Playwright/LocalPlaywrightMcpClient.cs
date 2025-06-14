@@ -3,7 +3,7 @@ using Skrapr.Domain;
 
 namespace Skrapr.Infra.Playwright;
 
-public class LocalMcpServerPlaywrightConfigurator : IPlaywrightMcpClient
+public class LocalPlaywrightMcpClient : IPlaywrightMcpClient
 {
     public Task<IMcpClient> BuildMcpClient() =>
         McpClientFactory.CreateAsync(

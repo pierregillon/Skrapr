@@ -4,7 +4,7 @@ using Skrapr.Domain;
 
 namespace Skrapr.Infra.Playwright;
 
-public class RemoteMcpServerPlaywrightConfigurator(IOptions<PlaywrightMcpConfiguration> playwrightConfiguration)
+public class RemotePlaywrightMcpClient(IOptions<PlaywrightMcpConfiguration> playwrightConfiguration)
     : IPlaywrightMcpClient
 {
     private readonly PlaywrightMcpConfiguration _playwrightMcpConfiguration = playwrightConfiguration.Value;

@@ -43,7 +43,9 @@ public class SemanticKernelAgent(
                             {schema}
                             """;
 
-        var responses = await agent.InvokeAsync(instructions, new ChatHistoryAgentThread()).ToListAsync();
+        var thread = new ChatHistoryAgentThread();
+        
+        var responses = await agent.InvokeAsync(instructions, thread).ToListAsync();
 
         var jsonResult = ToJsonElement(responses.Select(x => x.Message).ToList());
 

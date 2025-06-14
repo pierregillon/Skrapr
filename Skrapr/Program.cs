@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Options;
 using Skrapr;
 using Skrapr.Domain;
 using Skrapr.Infra;
@@ -22,11 +23,21 @@ builder.Services
 builder.Services
     .AddOptions<PlaywrightMcpConfiguration>()
     .BindConfiguration(PlaywrightMcpConfiguration.SectionName)
-    .ValidateDataAnnotations();
+    .ValidateDataAnnotations()
+    .PostConfigure(x => x.EnsureValid());
 
 builder.Services
     .AddScoped<IAgent, SemanticKernelAgent>()
-    .AddScoped<IPlaywrightMcpClient, LocalMcpServerPlaywrightConfigurator>();
+    .AddScoped<LocalPlaywrightMcpClient>()
+    .AddScoped<RemotePlaywrightMcpClient>()
+    .AddScoped<IPlaywrightMcpClient>(sp =>
+    {
+        var configuration = sp.GetRequiredService<IOptions<PlaywrightMcpConfiguration>>();
+
+        return configuration.Value.IsLocal
+            ? sp.GetRequiredService<LocalPlaywrightMcpClient>()
+            : sp.GetRequiredService<RemotePlaywrightMcpClient>();
+    });
 
 var app = builder.Build();
 
