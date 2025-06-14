@@ -7,7 +7,7 @@ using Skrapr.Domain.ValueObjects;
 
 #pragma warning disable SKEXP0001
 
-namespace Skrapr;
+namespace Skrapr.Presentation;
 
 [McpServerToolType]
 [Description("""

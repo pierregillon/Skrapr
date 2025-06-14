@@ -2,7 +2,7 @@ using Azure.Monitor.OpenTelemetry.Exporter;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 
-namespace Skrapr.Presentation.Telemetry;
+namespace Skrapr.Infra.Telemetry;
 
 public static class DependencyInjection
 {

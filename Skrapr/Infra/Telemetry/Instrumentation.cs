@@ -1,6 +1,6 @@
 using System.Diagnostics;
 
-namespace Skrapr.Presentation.Telemetry;
+namespace Skrapr.Infra.Telemetry;
 
 public class Instrumentation : IDisposable
 {

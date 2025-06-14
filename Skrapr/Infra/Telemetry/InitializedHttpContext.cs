@@ -1,4 +1,4 @@
-namespace Skrapr.Presentation.Telemetry;
+namespace Skrapr.Infra.Telemetry;
 
 public record InitializedHttpContext(
     HttpContext Context,

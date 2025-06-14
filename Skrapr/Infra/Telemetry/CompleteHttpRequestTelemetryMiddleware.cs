@@ -1,4 +1,4 @@
-namespace Skrapr.Presentation.Telemetry;
+namespace Skrapr.Infra.Telemetry;
 
 internal class CompleteHttpRequestTelemetryMiddleware(IActivityAccessor activityAccessor) : IMiddleware
 {

@@ -1,8 +1,7 @@
-using Skrapr;
 using Skrapr.Domain;
 using Skrapr.Infra;
-using Skrapr.Presentation.HealthCheck;
-using Skrapr.Presentation.Telemetry;
+using Skrapr.Infra.Telemetry;
+using Skrapr.Presentation;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,29 +10,22 @@ builder
     .AddEnvironmentVariables();
 
 builder.Services
-    .AddMcpServer()
-    .WithHttpTransport()
-    .WithTools<ScrapingTools>();
-
-builder.Services
-    .AddHealthCheckServices()
-    .AddTelemetryServices(builder.Environment, builder.Configuration)
+    .AddPresentation()
     .AddDomain()
-    .AddInfrastructure();
+    .AddInfrastructure(builder.Environment, builder.Configuration);
 
 builder.Logging
     .ConfigureTelemetryLogging(builder.Configuration);
 
 var app = builder.Build();
 
-app.MapMcp();
 app
-    .ConfigureHealthChecksRoutes()
-    .ConfigureTelemetry(app.Configuration);
+    .ConfigurePresentation()
+    .ConfigureInfrastructure();
 
 app.Run();
 
 namespace Skrapr
 {
-    public partial class Program { }
+    public class Program { }
 }
