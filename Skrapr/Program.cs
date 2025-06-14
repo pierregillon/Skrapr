@@ -26,7 +26,7 @@ builder.Services
 
 builder.Services
     .AddScoped<IAgent, SemanticKernelAgent>()
-    .AddScoped<IPlaywrightConfigurator, RemoteMcpServerPlaywrightConfigurator>();
+    .AddScoped<IPlaywrightMcpClient, LocalMcpServerPlaywrightConfigurator>();
 
 var app = builder.Build();
 
