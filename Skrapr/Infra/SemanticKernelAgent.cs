@@ -18,7 +18,7 @@ public class SemanticKernelAgent(
 {
     private readonly AzureOpenAiConfiguration _configuration = configuration.Value;
 
-    public async Task<WebPageParsingResult> Inspect(WebSiteUrl url, UserDataJsonSchema schema, string? instruction)
+    public async Task<WebSiteInspectionResult> Inspect(WebSiteUrl url, UserDataJsonSchema schema, string? instruction)
     {
         var agent =
             new ChatCompletionAgent
@@ -47,7 +47,7 @@ public class SemanticKernelAgent(
 
         var jsonResult = ToJsonElement(responses.Select(x => x.Message).ToList());
 
-        return new WebPageParsingResult(jsonResult);
+        return new WebSiteInspectionResult(jsonResult);
     }
 
     private async Task<Kernel> BuildKernel()

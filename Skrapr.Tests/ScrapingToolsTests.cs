@@ -159,7 +159,7 @@ public class ScrapingToolsTests(ITestOutputHelper output) : IDisposable, IAsyncD
         result.IsValid.Should().BeTrue();
     }
 
-    private async Task<WebPageParsingResult> ScrapeWithSchema(
+    private async Task<WebSiteInspectionResult> ScrapeWithSchema(
         string webSite = "https://www.google.com",
         string schema = "{}",
         string? instruction = null
@@ -189,7 +189,7 @@ public class ScrapingToolsTests(ITestOutputHelper output) : IDisposable, IAsyncD
 
         var root = document.RootElement.EnumerateObject().First().Value;
 
-        return new WebPageParsingResult(root);
+        return new WebSiteInspectionResult(root);
     }
 
     private static async Task<IMcpClient> BuildMcpClient(HttpClient client)
