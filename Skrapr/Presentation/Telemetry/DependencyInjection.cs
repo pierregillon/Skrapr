@@ -1,5 +1,4 @@
 using Azure.Monitor.OpenTelemetry.Exporter;
-using OpenTelemetry.Logs;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 
@@ -8,6 +7,7 @@ namespace Skrapr.Presentation.Telemetry;
 public static class DependencyInjection
 {
     private const string ApplicationInsightsConnectionStringKey = "ApplicationInsights:ConnectionString";
+    private static readonly string[] HealthCheckRoutes = ["/hc", "/liveness"];
 
     public static IServiceCollection AddTelemetryServices(
         this IServiceCollection services,
@@ -16,11 +16,6 @@ public static class DependencyInjection
     )
     {
         services.AddSingleton<Instrumentation>();
-
-        if (!configuration.TryGetConnectionString(out var connectionString))
-        {
-            return services;
-        }
 
         services
             .AddTransient<CompleteHttpRequestTelemetryMiddleware>()
@@ -31,29 +26,38 @@ public static class DependencyInjection
             .ConfigureResource(builder => builder.AddService(hostEnvironment.ApplicationName))
             .WithTracing(builder =>
             {
-                builder
+                builder = builder
                     .AddSource(Instrumentation.ActivitySourceName)
                     .SetSampler(new AlwaysOnSampler())
                     .SetErrorStatusOnException()
-                    .AddAspNetCoreInstrumentation(opt => { opt.RecordException = true; })
-                    .AddHttpClientInstrumentation()
-                    .AddAzureMonitorTraceExporter(o => o.ConnectionString = connectionString);
+                    .AddAspNetCoreInstrumentation(opt =>
+                    {
+                        opt.RecordException = true;
+                        opt.Filter = context => !IsHealthCheckRequest(context.Request);
+                    })
+                    .AddHttpClientInstrumentation();
+                
+                if (configuration.TryGetConnectionString(out var connectionString))
+                {
+                    builder.AddAzureMonitorTraceExporter(o => o.ConnectionString = connectionString);
+                }
+                else
+                {
+                    builder.AddConsoleExporter();
+                }
             });
 
         return services;
     }
 
+    private static bool IsHealthCheckRequest(HttpRequest request) =>
+        !HealthCheckRoutes.Equals(request.Path);
+
     public static ILoggingBuilder ConfigureTelemetryLogging(this ILoggingBuilder builder, IConfiguration configuration)
     {
         if (!configuration.TryGetConnectionString(out var connectionString))
         {
-            builder
-                .AddOpenTelemetry(options =>
-                {
-                    options.IncludeFormattedMessage = true;
-                    options.IncludeScopes = true;
-                    options.AddConsoleExporter();
-                });
+            return builder;
         }
 
         return builder
@@ -61,7 +65,7 @@ public static class DependencyInjection
             {
                 options.IncludeFormattedMessage = true;
                 options.IncludeScopes = true;
-                options.AddAzureMonitorLogExporter(o => { o.ConnectionString = connectionString; });
+                options.AddAzureMonitorLogExporter(o => o.ConnectionString = connectionString);
             });
     }
 

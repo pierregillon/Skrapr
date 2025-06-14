@@ -1,6 +1,7 @@
 using Skrapr;
 using Skrapr.Domain;
 using Skrapr.Infra;
+using Skrapr.Presentation.HealthCheck;
 using Skrapr.Presentation.Telemetry;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +16,7 @@ builder.Services
     .WithTools<ScrapingTools>();
 
 builder.Services
+    .AddHealthCheckServices()
     .AddTelemetryServices(builder.Environment, builder.Configuration)
     .AddDomain()
     .AddInfrastructure();
@@ -24,8 +26,10 @@ builder.Logging
 
 var app = builder.Build();
 
-app.ConfigureTelemetry(app.Configuration);
 app.MapMcp();
+app
+    .ConfigureHealthChecksRoutes()
+    .ConfigureTelemetry(app.Configuration);
 
 app.Run();
 
