@@ -97,6 +97,7 @@ public class ScrapingToolsTests(ITestOutputHelper output) : IDisposable, IAsyncD
     }
 
     [Fact]
+    [Trait("Category", "Integration")]
     public async Task Scrape_web_site()
     {
         var jsonSchema =

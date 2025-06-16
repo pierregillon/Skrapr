@@ -1,0 +1,29 @@
+name: .NET
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build_and_tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 9.0.x
+      - name: Restore dependencies
+        working-directory: src
+        run: dotnet restore
+      - name: Build
+        working-directory: src
+        run: dotnet build --no-restore --configuration Release
+      - name: Test
+        working-directory: src
+        run: dotnet test --no-build --verbosity normal --configuration Release --filter "Category!=Integration"
+      - name: Pack
+        working-directory: src
+        run: dotnet pack -o out --no-build --configuration Release
