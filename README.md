@@ -1,5 +1,7 @@
 # Skrapr - MCP Server
 
+[![.NET](https://github.com/pierregillon/Skrapr/actions/workflows/dotnet.yml/badge.svg)](https://github.com/pierregillon/Skrapr/actions/workflows/dotnet.yml)
+
 🎉 Cloud version available! [Fill this form](https://airtable.com/appjnzD8em5Eg1ljz/pag4KfNxEaeFp1s8l/form) to get access.
 
 Skrapr is an **intelligent web scraping tool** that combines AI capabilities with browser automation to extract structured data from websites.
