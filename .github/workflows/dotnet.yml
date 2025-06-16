@@ -16,14 +16,10 @@ jobs:
         with:
           dotnet-version: 9.0.x
       - name: Restore dependencies
-        working-directory: src
         run: dotnet restore
       - name: Build
-        working-directory: src
         run: dotnet build --no-restore --configuration Release
       - name: Test
-        working-directory: src
-        run: dotnet test --no-build --verbosity normal --configuration Release --filter "Category!=Integration"
+        run: dotnet test --no-build --verbosity normal --configuration Release --filter "Category!=Integration" -e "PlaywrightMcp__IsLocal=true" -e "AzureOpenAi__Endpoint=https://xx" -e "AzureOpenAi__DeploymentName=xx" -e "AzureOpenAi__ApiKey=xx"
       - name: Pack
-        working-directory: src
         run: dotnet pack -o out --no-build --configuration Release
